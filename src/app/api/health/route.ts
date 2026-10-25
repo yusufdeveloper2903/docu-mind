@@ -1,8 +1,10 @@
+import { connection } from "next/server";
 import { getContainer } from "@/container";
 import { handle } from "@/lib/http";
 
 /** Liveness plus the answer mode, so the UI can explain when live answers are unavailable. */
 export const GET = handle(async () => {
+  await connection();
   const { pool, config } = getContainer();
   await pool.query("SELECT 1");
   const mode =

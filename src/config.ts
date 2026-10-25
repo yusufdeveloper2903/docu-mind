@@ -2,8 +2,10 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 
+export const DEFAULT_DATABASE_URL = "postgres://localhost:5432/documind";
+
 const schema = z.object({
-  DATABASE_URL: z.string().default("postgres://localhost:5432/documind"),
+  DATABASE_URL: z.string().default(DEFAULT_DATABASE_URL),
   LLM_PROVIDER: z.enum(["anthropic", "mock"]).default("anthropic"),
   ANTHROPIC_API_KEY: z.string().optional(),
   CLAUDE_MODEL: z.string().min(1).default("claude-opus-5-5"),
@@ -11,7 +13,7 @@ const schema = z.object({
   EMBEDDING_MODEL: z.string().min(1).default("Xenova/bge-small-en-v1.5"),
   MODEL_CACHE_DIR: z.string().default(".cache/models"),
   RETRIEVAL_TOP_K: z.coerce.number().int().min(1).max(20).default(6),
-  RETRIEVAL_MIN_SIMILARITY: z.coerce.number().min(0).max(1).default(0.6),
+  RETRIEVAL_MIN_SIMILARITY: z.coerce.number().min(0).max(1).default(0.5),
   MAX_UPLOAD_MB: z.coerce.number().positive().default(10),
 });
 

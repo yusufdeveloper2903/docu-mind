@@ -1,0 +1,142 @@
+[
+  {
+    "id": "vacation-days",
+    "question": "How many vacation days do full-time employees get?",
+    "document": "employee-handbook.md",
+    "evidence": "28 days of paid vacation",
+    "mustInclude": ["28"]
+  },
+  {
+    "id": "carry-over",
+    "question": "Until when can I use vacation days carried over from last year?",
+    "document": "employee-handbook.md",
+    "evidence": "carried-over days expire on March 31",
+    "mustInclude": ["March 31"]
+  },
+  {
+    "id": "parental-leave",
+    "question": "Is parental leave paid, and for how long?",
+    "document": "employee-handbook.md",
+    "evidence": "16 weeks of fully paid parental leave",
+    "mustInclude": ["16 weeks"]
+  },
+  {
+    "id": "home-office",
+    "question": "What equipment allowance do remote employees get for their home office?",
+    "document": "employee-handbook.md",
+    "evidence": "home office stipend of 1,200 EUR",
+    "mustInclude": ["1,200"]
+  },
+  {
+    "id": "wifi",
+    "question": "Can Beacon connect to my 5 GHz router?",
+    "document": "beacon-product-faq.md",
+    "evidence": "5 GHz networks are not supported",
+    "mustInclude": ["2.4 GHz"]
+  },
+  {
+    "id": "battery",
+    "question": "How long does Beacon's battery last on one charge?",
+    "document": "beacon-product-faq.md",
+    "evidence": "battery lasts up to 14 days",
+    "mustInclude": ["14 days"]
+  },
+  {
+    "id": "carbon-monoxide",
+    "question": "Does the device detect carbon monoxide?",
+    "document": "beacon-product-faq.md",
+    "evidence": "It does not detect carbon monoxide",
+    "mustInclude": ["not"]
+  },
+  {
+    "id": "warranty",
+    "question": "What does the warranty cover, and for how long?",
+    "document": "beacon-product-faq.md",
+    "evidence": "2-year limited warranty",
+    "mustInclude": ["2-year"]
+  },
+  {
+    "id": "password-length",
+    "question": "What is the minimum password length?",
+    "document": "security-policy.txt",
+    "evidence": "at least 14 characters",
+    "mustInclude": ["14"]
+  },
+  {
+    "id": "incident",
+    "question": "I clicked a link in a phishing email. How quickly do I have to report it?",
+    "document": "security-policy.txt",
+    "evidence": "within 1 hour of discovery",
+    "mustInclude": ["1 hour"]
+  },
+  {
+    "id": "firmware-approvals",
+    "question": "How many code review approvals does a firmware pull request need?",
+    "document": "engineering-onboarding.md",
+    "evidence": "changes to firmware need two approvals",
+    "mustInclude": ["two"]
+  },
+  {
+    "id": "friday-deploys",
+    "question": "Can I deploy the cloud backend on a Friday afternoon?",
+    "document": "engineering-onboarding.md",
+    "evidence": "Deploys are blocked on Fridays after 14:00",
+    "mustInclude": ["14:00"]
+  },
+  {
+    "id": "on-call-ack",
+    "question": "How fast must the on-call engineer acknowledge a page?",
+    "document": "engineering-onboarding.md",
+    "evidence": "acknowledge a page within 15 minutes",
+    "mustInclude": ["15 minutes"]
+  },
+  {
+    "id": "sick-note",
+    "question": "I'm ill for two days. Do I need a certificate from my GP?",
+    "document": "employee-handbook.md",
+    "evidence": "only required from the fourth consecutive day",
+    "mustInclude": ["fourth"]
+  },
+  {
+    "id": "training-money",
+    "question": "How much money can I spend on training courses each year?",
+    "document": "employee-handbook.md",
+    "evidence": "annual learning budget of 1,500 EUR",
+    "mustInclude": ["1,500"]
+  },
+  {
+    "id": "pager",
+    "question": "When do new engineers start carrying the pager?",
+    "document": "engineering-onboarding.md",
+    "evidence": "join the on-call rotation after their third month",
+    "mustInclude": ["third month"]
+  },
+  {
+    "id": "chatgpt-customer-data",
+    "question": "Am I allowed to paste customer readings into ChatGPT?",
+    "document": "security-policy.txt",
+    "evidence": "must never be pasted into unapproved third-party tools",
+    "mustInclude": ["approved"]
+  },
+  {
+    "id": "out-of-scope-ceo",
+    "question": "What is the name of the company's CEO?",
+    "document": null,
+    "evidence": null,
+    "mustInclude": []
+  },
+  {
+    "id": "out-of-scope-weather",
+    "question": "What will the weather be like in Paris tomorrow?",
+    "document": null,
+    "evidence": null,
+    "mustInclude": []
+  },
+  {
+    "id": "out-of-scope-revenue",
+    "question": "What was Lumen Labs' revenue last year?",
+    "document": null,
+    "evidence": null,
+    "mustInclude": []
+  }
+]

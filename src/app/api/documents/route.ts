@@ -1,9 +1,12 @@
-import { after } from "next/server";
+import { after, connection } from "next/server";
 import { getContainer } from "@/container";
 import { ValidationError } from "@/domain/errors";
 import { handle } from "@/lib/http";
 
-export const GET = handle(async () => Response.json(await getContainer().documents.list()));
+export const GET = handle(async () => {
+  await connection(); // always read the live library, never a build-time snapshot
+  return Response.json(await getContainer().documents.list());
+});
 
 /**
  * Accepts one or more files under the `file` field. Each is recorded as `processing` and
