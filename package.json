@@ -15,10 +15,10 @@
     "test:integration": "vitest run --project integration",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "db:migrate": "tsx scripts/migrate.ts",
-    "seed": "tsx scripts/seed.ts",
-    "eval:retrieval": "tsx evals/run.ts retrieval",
-    "eval:answers": "tsx evals/run.ts answers"
+    "db:migrate": "tsx --env-file-if-exists=.env scripts/migrate.ts",
+    "seed": "tsx --env-file-if-exists=.env scripts/seed.ts",
+    "eval:retrieval": "tsx --env-file-if-exists=.env evals/run.ts retrieval",
+    "eval:answers": "tsx --env-file-if-exists=.env evals/run.ts answers"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
