@@ -25,7 +25,10 @@ export type Config = z.infer<typeof schema>;
  */
 function loadExternalKeyFile(): void {
   if (process.env.ANTHROPIC_API_KEY) return;
-  const file = path.resolve(process.env.ANTHROPIC_ENV_FILE ?? "../.anthropic.env");
+  // A runtime-only path: tell Turbopack not to trace (and bundle) the filesystem around it.
+  const file = path.resolve(
+    /* turbopackIgnore: true */ process.env.ANTHROPIC_ENV_FILE ?? "../.anthropic.env",
+  );
   if (existsSync(file)) process.loadEnvFile(file);
 }
 

@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { z } from "zod";
 import { DomainError, ValidationError } from "@/domain/errors";
 
@@ -39,6 +40,7 @@ export function handle<A extends unknown[]>(fn: (...args: A) => Promise<Response
     try {
       return await fn(...args);
     } catch (error) {
+      unstable_rethrow(error); // Next.js control flow (e.g. prerender bail-out) is not an error
       if (error instanceof ValidationError) {
         return problem(400, error.title, error.message, { errors: error.issues });
       }
