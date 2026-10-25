@@ -51,7 +51,7 @@ function createContainer() {
     ingestion: new IngestionService(documents, embedder),
     retrieval,
     answerProvider,
-    chat: () => new ChatService(retrieval, conversations, answerProvider()),
+    chat: new ChatService(retrieval, conversations, answerProvider),
   };
 }
 

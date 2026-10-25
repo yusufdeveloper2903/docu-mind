@@ -6,7 +6,7 @@ import { chatRequestSchema } from "@/lib/schemas";
 /** Streams the answer as NDJSON: one `ChatEvent` per line. */
 export const POST = handle(async (request: Request) => {
   const input = parseOrThrow(chatRequestSchema, await readJson(request), "request body");
-  const events = await getContainer().chat().ask(input, request.signal);
+  const events = await getContainer().chat.ask(input, request.signal);
   const encoder = new TextEncoder();
 
   const body = new ReadableStream<Uint8Array>({

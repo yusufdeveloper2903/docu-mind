@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { NO_ANSWER, REFUSAL_NOTICE } from "@/domain/answer";
-import { NotFoundError } from "@/domain/errors";
+import { NotConfiguredError, NotFoundError } from "@/domain/errors";
 import type { AnswerEvent, AnswerProvider } from "@/domain/types";
 import { ChatService } from "@/services/chat";
 import type { RetrievalResult } from "@/services/retrieval";
@@ -27,7 +27,11 @@ function setup(retrieval: Partial<RetrievalResult>, events: AnswerEvent[] | Erro
     weak: false,
     ...retrieval,
   }));
-  return { service: new ChatService({ search }, conversations, provider), conversations, provider };
+  return {
+    service: new ChatService({ search }, conversations, () => provider),
+    conversations,
+    provider,
+  };
 }
 
 describe("ChatService", () => {
@@ -102,6 +106,34 @@ describe("ChatService", () => {
 
     expect(events.at(-1)).toEqual({ type: "error", message: "Claude is down" });
     expect(conversations.addMessage).toHaveBeenCalledTimes(1); // only the question
+  });
+
+  it("still answers 'not found' without a configured model, and explains when one is needed", async () => {
+    const conversations = setup({}).conversations;
+    const missingKey = () => {
+      throw new NotConfiguredError("Live answers need ANTHROPIC_API_KEY.");
+    };
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const weak = new ChatService(
+      { search: async () => ({ sources: [], topSimilarity: 0, weak: true }) },
+      conversations,
+      missingKey,
+    );
+    expect((await collect(await weak.ask({ question: "?" }))).at(-1)).toEqual({
+      type: "end",
+      stopReason: "no_context",
+    });
+
+    const strong = new ChatService(
+      { search: async () => ({ sources: [makeSource(1)], topSimilarity: 0.9, weak: false }) },
+      conversations,
+      missingKey,
+    );
+    expect((await collect(await strong.ask({ question: "?" }))).at(-1)).toEqual({
+      type: "error",
+      message: "Live answers need ANTHROPIC_API_KEY.",
+    });
   });
 
   it("rejects an unknown conversation before streaming", async () => {

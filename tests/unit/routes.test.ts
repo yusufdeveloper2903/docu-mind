@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NotConfiguredError } from "@/domain/errors";
 import { IngestionService } from "@/services/ingestion";
 
 // Route handlers are tested as plain functions; the container is replaced with fakes.
@@ -8,7 +7,7 @@ const container = vi.hoisted(() => ({
   documents: { list: vi.fn(), delete: vi.fn() },
   chunks: { get: vi.fn() },
   ingestion: { register: vi.fn(), process: vi.fn() },
-  chat: vi.fn(),
+  chat: { ask: vi.fn() },
 }));
 vi.mock("@/container", () => ({ getContainer: () => container }));
 vi.mock("next/server", () => ({
@@ -54,17 +53,16 @@ describe("POST /api/chat", () => {
     const problem = await response.json();
     expect(problem).toMatchObject({ status: 400, title: "Validation Failed" });
     if (path !== "request body") expect(problem.errors[0].path).toBe(path);
-    expect(container.chat).not.toHaveBeenCalled();
+    expect(container.chat.ask).not.toHaveBeenCalled();
   });
 
   it("streams NDJSON events for a valid question", async () => {
-    container.chat.mockReturnValue({
-      ask: async () =>
-        (async function* () {
-          yield { type: "start", conversationId: UUID, sources: [] };
-          yield { type: "end", stopReason: "end_turn" };
-        })(),
-    });
+    container.chat.ask.mockResolvedValue(
+      (async function* () {
+        yield { type: "start", conversationId: UUID, sources: [] };
+        yield { type: "end", stopReason: "end_turn" };
+      })(),
+    );
     const response = await chat(postJson(JSON.stringify({ question: "Vacation?" })));
     expect(response.headers.get("content-type")).toContain("application/x-ndjson");
     const lines = (await response.text())
@@ -72,15 +70,6 @@ describe("POST /api/chat", () => {
       .split("\n")
       .map((l) => JSON.parse(l));
     expect(lines.map((l) => l.type)).toEqual(["start", "end"]);
-  });
-
-  it("maps a missing API key to 503", async () => {
-    container.chat.mockImplementation(() => {
-      throw new NotConfiguredError("Live answers need ANTHROPIC_API_KEY.");
-    });
-    const response = await chat(postJson(JSON.stringify({ question: "Vacation?" })));
-    expect(response.status).toBe(503);
-    expect((await response.json()).detail).toContain("ANTHROPIC_API_KEY");
   });
 });
 

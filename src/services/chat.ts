@@ -28,7 +28,8 @@ export class ChatService {
   constructor(
     private readonly retrieval: Pick<RetrievalService, "search">,
     private readonly conversations: Conversations,
-    private readonly provider: AnswerProvider,
+    /** Resolved lazily, so retrieval and the "not found" gate work without a configured model. */
+    private readonly provider: () => AnswerProvider,
   ) {}
 
   /**
@@ -78,7 +79,7 @@ export class ChatService {
     let segments: AnswerSegment[] = [];
     let stopReason: StopReason = "other";
     try {
-      for await (const event of this.provider.stream({ question, history, sources }, signal)) {
+      for await (const event of this.provider().stream({ question, history, sources }, signal)) {
         segments = applyAnswerEvent(segments, event);
         if (event.type === "end") stopReason = event.stopReason;
         yield event;
