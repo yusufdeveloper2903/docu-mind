@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  // Native / WASM-heavy packages are loaded with Node's require instead of being bundled.
+  serverExternalPackages: ["unpdf"],
   turbopack: {
     rules: {
       "*.css": {
