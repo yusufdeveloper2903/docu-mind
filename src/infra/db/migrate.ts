@@ -21,7 +21,9 @@ export async function migrate(pool: pg.Pool, dir = MIGRATIONS_DIR): Promise<stri
     );
     const { rows } = await client.query<{ name: string }>("SELECT name FROM schema_migrations");
     const applied = new Set(rows.map((r) => r.name));
-    const pending = (await readdir(dir)).filter((f) => f.endsWith(".sql") && !applied.has(f)).sort();
+    const pending = (await readdir(dir))
+      .filter((f) => f.endsWith(".sql") && !applied.has(f))
+      .sort();
 
     for (const name of pending) {
       const sql = await readFile(path.join(dir, name), "utf8");

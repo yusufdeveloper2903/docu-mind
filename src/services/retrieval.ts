@@ -49,6 +49,10 @@ export class RetrievalService {
         return chunk ? [{ ...chunk, score: f.score }] : [];
       })
       .map((s, i) => ({ ...s, index: i + 1 }));
-    return { sources, topSimilarity, weak: sources.length === 0 || topSimilarity < this.options.minSimilarity };
+    return {
+      sources,
+      topSimilarity,
+      weak: sources.length === 0 || topSimilarity < this.options.minSimilarity,
+    };
   }
 }

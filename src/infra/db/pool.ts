@@ -8,7 +8,10 @@ const globalForPool = globalThis as unknown as { documindPool?: pg.Pool };
 
 /** One pool per process, reused across Next.js hot reloads. */
 export function getPool(): pg.Pool {
-  globalForPool.documindPool ??= new pg.Pool({ connectionString: getConfig().DATABASE_URL, max: 10 });
+  globalForPool.documindPool ??= new pg.Pool({
+    connectionString: getConfig().DATABASE_URL,
+    max: 10,
+  });
   return globalForPool.documindPool;
 }
 

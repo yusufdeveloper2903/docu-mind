@@ -14,7 +14,10 @@ export interface RegisteredUpload {
   format: DocumentFormat;
 }
 
-type DocumentStore = Pick<DocumentsRepository, "create" | "get" | "completeIngestion" | "markFailed">;
+type DocumentStore = Pick<
+  DocumentsRepository,
+  "create" | "get" | "completeIngestion" | "markFailed"
+>;
 
 /**
  * Ingestion runs in two steps so the HTTP layer can answer immediately: `register` validates the
@@ -31,7 +34,8 @@ export class IngestionService {
   async register(file: UploadedFile): Promise<RegisteredUpload> {
     const format = detectFormat(file.name);
     if (file.bytes.byteLength === 0) throw new ValidationError(`"${file.name}" is empty.`);
-    const preview = format === "markdown" ? new TextDecoder().decode(file.bytes.subarray(0, 4096)) : "";
+    const preview =
+      format === "markdown" ? new TextDecoder().decode(file.bytes.subarray(0, 4096)) : "";
     const document = await this.documents.create({
       title: deriveTitle(file.name, preview, format),
       filename: file.name,

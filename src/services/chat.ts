@@ -16,7 +16,10 @@ export interface AskInput {
   conversationId?: string;
 }
 
-type Conversations = Pick<ConversationsRepository, "create" | "exists" | "addMessage" | "recentTurns">;
+type Conversations = Pick<
+  ConversationsRepository,
+  "create" | "exists" | "addMessage" | "recentTurns"
+>;
 
 /** Previous messages sent along for follow-up questions ("and for contractors?"). */
 const HISTORY_MESSAGES = 6;
@@ -33,7 +36,8 @@ export class ChatService {
    * database failures surface as normal HTTP errors; only the answer itself is streamed.
    */
   async ask(input: AskInput, signal?: AbortSignal): Promise<AsyncGenerator<ChatEvent>> {
-    const conversationId = input.conversationId ?? (await this.conversations.create(input.question));
+    const conversationId =
+      input.conversationId ?? (await this.conversations.create(input.question));
     if (input.conversationId && !(await this.conversations.exists(input.conversationId))) {
       throw new NotFoundError(`Conversation ${input.conversationId} does not exist.`);
     }
@@ -82,7 +86,10 @@ export class ChatService {
     } catch (error) {
       if (signal?.aborted) return;
       console.error("Answer stream failed:", error);
-      yield { type: "error", message: (error as Error).message || "The answer could not be generated." };
+      yield {
+        type: "error",
+        message: (error as Error).message || "The answer could not be generated.",
+      };
       return;
     }
     await this.save(conversationId, segments, stopReason);

@@ -84,7 +84,10 @@ async function evalRetrieval({ container, cases }: { container: Container; cases
   const rows = strategies.map((name) => {
     const r = ranks[name];
     const hits = Object.fromEntries(
-      K_VALUES.map((k) => [`hit@${k}`, pct(r.filter((x) => x !== null && x <= k).length, r.length)]),
+      K_VALUES.map((k) => [
+        `hit@${k}`,
+        pct(r.filter((x) => x !== null && x <= k).length, r.length),
+      ]),
     );
     const mrr = r.reduce<number>((sum, x) => sum + (x ? 1 / x : 0), 0) / r.length;
     return { strategy: name, ...hits, MRR: mrr.toFixed(3) };
@@ -107,7 +110,9 @@ async function evalAnswers({ container, cases }: { container: Container; cases: 
     }
     const answer = weak ? NO_ANSWER : segmentsToText(segments);
     results.push({ id: c.id, answer, ...grade(c, answer, segments, sources) });
-    console.log(`  ${c.id.padEnd(22)} ${results.at(-1)!.correct ? "ok " : "BAD"} ${answer.slice(0, 90)}`);
+    console.log(
+      `  ${c.id.padEnd(22)} ${results.at(-1)!.correct ? "ok " : "BAD"} ${answer.slice(0, 90)}`,
+    );
   }
 
   const answerable = results.filter((_, i) => cases[i]!.evidence);

@@ -2,7 +2,12 @@ import { z } from "zod";
 import { DomainError, ValidationError } from "@/domain/errors";
 
 /** RFC 9457 problem details. */
-export function problem(status: number, title: string, detail: string, extra: object = {}): Response {
+export function problem(
+  status: number,
+  title: string,
+  detail: string,
+  extra: object = {},
+): Response {
   return Response.json(
     { type: "about:blank", title, status, detail, ...extra },
     { status, headers: { "content-type": "application/problem+json" } },

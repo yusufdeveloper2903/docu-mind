@@ -6,7 +6,10 @@ import type { DocumentRecord } from "@/domain/types";
 export const CORPUS_DIR = path.resolve(process.cwd(), "evals/corpus");
 
 /** Ingests every file in `dir`, skipping files that are already ingested (idempotent seed). */
-export async function ingestCorpus(container: Container, dir = CORPUS_DIR): Promise<DocumentRecord[]> {
+export async function ingestCorpus(
+  container: Container,
+  dir = CORPUS_DIR,
+): Promise<DocumentRecord[]> {
   const results: DocumentRecord[] = [];
   for (const name of (await readdir(dir)).sort()) {
     const existing = await container.documents.findReadyByFilename(name);

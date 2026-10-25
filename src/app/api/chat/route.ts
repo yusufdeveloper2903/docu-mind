@@ -11,7 +11,8 @@ export const POST = handle(async (request: Request) => {
 
   const body = new ReadableStream<Uint8Array>({
     async pull(controller) {
-      const send = (event: ChatEvent) => controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
+      const send = (event: ChatEvent) =>
+        controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
       try {
         const { value, done } = await events.next();
         if (done) controller.close();

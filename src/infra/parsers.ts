@@ -41,5 +41,10 @@ export async function extractText(bytes: Uint8Array, format: DocumentFormat): Pr
 /** A readable title: the first Markdown H1 if there is one, else the filename without extension. */
 export function deriveTitle(filename: string, text: string, format: DocumentFormat): string {
   const h1 = format === "markdown" ? /^#\s+(.+)$/m.exec(text)?.[1]?.trim() : undefined;
-  return h1 || filename.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim() || filename;
+  if (h1) return h1;
+  const base = filename
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
+  return base ? base[0]!.toUpperCase() + base.slice(1) : filename;
 }

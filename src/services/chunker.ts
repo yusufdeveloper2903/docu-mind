@@ -27,7 +27,8 @@ export function chunkDocument(
   format: DocumentFormat,
   options: ChunkOptions = DEFAULT_CHUNK_OPTIONS,
 ): ChunkDraft[] {
-  const sections = format === "markdown" ? splitMarkdownSections(text) : [{ heading: null, body: text }];
+  const sections =
+    format === "markdown" ? splitMarkdownSections(text) : [{ heading: null, body: text }];
   const chunks: ChunkDraft[] = [];
   for (const section of sections) {
     for (const content of packSection(section.body, options)) {
